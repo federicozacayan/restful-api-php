@@ -1,72 +1,209 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# RESTful API web server dockerized on PHP
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+This is a basic Hello-Wolrd appplication.
 
-## About Laravel
+## Requirements
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+It is assumed you have Linux OS, but you can run this project in Windows or MacOS also, just use the alternative  lines commands.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Linux**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- `Docker` installed
+- `docker-compose` installed
+- Any rest consumer application like `Postman` installed or any plugin REST client in any browser (like "Advanced REST client" in Chrome )
 
-## Learning Laravel
+## Set up
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Running in linux console.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prepare
 
-## Laravel Sponsors
+Clone this repository.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```bash
+git clone https://github.com/federicozacayan/restful-api-php.git .
+```
+Clone laradock repository.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
+```bash
+git submodule add https://github.com/Laradock/laradock.git laradok-a
+```
 
-## Contributing
+### Run
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Run the following command in the the laradok-a folder.
 
-## Security Vulnerabilities
+```bash
+sudo docker-compose up -d nginx mysql
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Stop
 
-## License
+Run the following command in the the laradok-a folder.
 
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+sudo docker-compose down
+```
+
+### Clean your disk
+
+Run the following command to remove the container first and his image after.
+
+```bash
+sudo docker rmi laradock_nginx laradock_php-fpm laradock_workspace docker:dind laradock_mysql
+```
+
+## Tutorial
+
+You can find a tutorial of this project in the following site.
+
+[https://federicozacayan.github.io/tutorial/restful-api-php/](https://federicozacayan.github.io/tutorial/restful-api-php/)
+
+## Usage
+
+All the responses have `ContentType application/json` header.
+
+### List all products
+
+**Definition**
+
+`GET /products`
+
+**Response**
+
+- `200 OK` on success.
+
+```json
+{
+    "count": 3,
+    "products": [
+        {
+            "name": "Federico Zacayan",
+            "price": 10,
+            "_id": "5d8a0988c56114001d6544bd",
+            "request": {
+                "type": "GET",
+                "url": "http://localhost:3000/products/5d8a0988c56114001d6544bd"
+            }
+        },
+        {
+            "name": "Software Developer",
+            "price": 10,
+            "_id": "5d8a098ec56114001d6544be",
+            "request": {
+                "type": "GET",
+                "url": "http://localhost:3000/products/5d8a098ec56114001d6544be"
+            }
+        }
+    ]
+}
+```
+
+### Registering a new product
+
+**Definition**
+
+`POST /products`
+
+**Arguments**
+
+- `"name":string` a friendly name for this product.
+- `"name":number` a friendly name for this product.
+
+**Response**
+
+- `201 Created` on success.
+
+```json
+{
+    "message": "Created product successfully",
+    "createdProduct": {
+        "name": "Federico Zacayan",
+        "price": 10,
+        "_id": "5d8a098ec56114001d6544be",
+        "request": {
+            "type": "GET",
+            "url": "http://localhost:3000/products/5d8a098ec56114001d6544be"
+        }
+    }
+}
+```
+
+## Lookup product details
+
+`GET /products/<identifier>`
+
+**Response**
+
+- `200 OK` on success.
+
+```json
+{
+    "product": {
+        "_id": "5d8a0988c56114001d6544bd",
+        "name": "Federico Zacayanr",
+        "price": 10
+    },
+    "request": {
+        "type": "GET",
+        "url": "http://localhost:3000/products"
+    }
+}
+```
+## update products
+
+`PATCH /products/<identifier>`
+**Arguments**
+
+- `array` with objects which represents the fields.
+  - `propName:string` name of property
+  - `value:Mixed` value of property
+```json
+[
+	{
+		"propName":"name",
+		"value":"Federico Zacayaan"
+	}
+]
+```
+
+**Response**
+
+- `200 OK` on success.
+
+```json
+{
+    "product": {
+        "_id": "5d8a0988c56114001d6544bd",
+        "name": "Federico Zacayanr",
+        "price": 10
+    },
+    "request": {
+        "type": "GET",
+        "url": "http://localhost:3000/products"
+    }
+}
+```
+
+## Delete a product
+
+**Definition**
+
+`DELETE /products/<identifier>`
+
+**Response**
+
+- `500 Internal Error` if the product does not exist.
+- `200 No Content` on success.
+```json
+{
+    "message": "Product deleted",
+    "request": {
+        "type": "POST",
+        "url": "http://localhost:3000/products",
+        "body": {
+            "name": "String",
+            "price": "Number"
+        }
+    }
+}
