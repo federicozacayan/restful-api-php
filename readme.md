@@ -45,14 +45,14 @@ After runn `exit` to leave the container, go to the mysql container.
 sudo docker-compose exec laradock_mysql_1 bash
 ```
 
-After run `mysql -u root -p` and with `root` as a password run the following queries.
+After run `mysql -u root -p` and writing `root` as a password run the following queries.
 ```sql
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
 ALTER USER 'default'@'%' IDENTIFIED WITH mysql_native_password BY 'secret';
 ```
 
-After runn `exit` to leave the container, go to the workspace container (Again).
+After run `exit` to leave the container, go to the workspace container again.
 ```bash
 sudo docker-compose exec workspace bash
 ```
@@ -65,15 +65,15 @@ php artisan migrate:refresh --seed
 
 ### Run
 
-Test the application in the following url
+Test the application in the following url.
 
 ```url
-http://localhost
+http://localhost/api/Product/
 ```
 
 ### Stop
 
-Run the following command in the the laradok-a folder.
+Run the following command in the the laradok folder.
 
 ```bash
 sudo docker-compose down
@@ -101,7 +101,7 @@ All the responses have `ContentType application/json` header.
 
 **Definition**
 
-`GET /products`
+`GET /Product`
 
 **Response**
 
@@ -130,7 +130,7 @@ All the responses have `ContentType application/json` header.
 
 **Definition**
 
-`POST /products`
+`POST /Product`
 
 **Arguments**
 
@@ -153,7 +153,7 @@ All the responses have `ContentType application/json` header.
 
 ## Lookup product details
 
-`GET /products/<identifier>`
+`GET /Product/<identifier>`
 
 **Response**
 
@@ -170,7 +170,7 @@ All the responses have `ContentType application/json` header.
 ```
 ## update products
 
-`PUT /products/<identifier>`
+`PUT /Product/<identifier>`
 **Arguments**
 - `"name":string` a friendly name for this product.
 - `"description":string` a friendly name for this product.
