@@ -21,20 +21,54 @@ Running in linux console.
 Clone this repository.
 
 ```bash
-git clone https://github.com/federicozacayan/restful-api-php.git .
+git clone --recurse-submodules https://github.com/federicozacayan/restful-api-php.git .
 ```
-Clone laradock repository.
-
-```bash
-git submodule add https://github.com/Laradock/laradock.git laradok-a
-```
-
-### Run
-
-Run the following command in the the laradok-a folder.
+Run the following command in the the laradok folder.
 
 ```bash
 sudo docker-compose up -d nginx mysql
+```
+
+Go to the container.
+
+```bash
+sudo docker-compose exec workspace bash
+```
+
+Run composer to download the libraries need by laravel.
+```bash
+composer install
+```
+
+After runn `exit` to leave the container, go to the mysql container.
+```bash
+sudo docker-compose exec laradock_mysql_1 bash
+```
+
+After run `mysql -u root -p` and with `root` as a password run the following queries.
+```sql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
+ALTER USER 'default'@'%' IDENTIFIED WITH mysql_native_password BY 'secret';
+```
+
+After runn `exit` to leave the container, go to the workspace container (Again).
+```bash
+sudo docker-compose exec workspace bash
+```
+
+Now, generate fake data into the database.
+```bash
+php artisan migrate:refresh --seed
+```
+
+
+### Run
+
+Test the application in the following url
+
+```url
+http://localhost
 ```
 
 ### Stop
@@ -74,29 +108,22 @@ All the responses have `ContentType application/json` header.
 - `200 OK` on success.
 
 ```json
-{
-    "count": 3,
-    "products": [
-        {
-            "name": "Federico Zacayan",
-            "price": 10,
-            "_id": "5d8a0988c56114001d6544bd",
-            "request": {
-                "type": "GET",
-                "url": "http://localhost:3000/products/5d8a0988c56114001d6544bd"
-            }
-        },
-        {
-            "name": "Software Developer",
-            "price": 10,
-            "_id": "5d8a098ec56114001d6544be",
-            "request": {
-                "type": "GET",
-                "url": "http://localhost:3000/products/5d8a098ec56114001d6544be"
-            }
-        }
-    ]
-}
+[
+    {
+        "id": 1,
+        "name": "Federico Zacayan",
+        "description": "effertz.maureen@yahoo.com",
+        "created_at": "2019-09-19 06:48:04",
+        "updated_at": "2019-09-19 06:48:04"
+    },
+    {
+        "id": 2,
+        "name": "Software Developer",
+        "description": "obaumbach@schuster.com",
+        "created_at": "2019-09-19 06:48:04",
+        "updated_at": "2019-09-19 06:48:04"
+    },
+]
 ```
 
 ### Registering a new product
@@ -108,7 +135,7 @@ All the responses have `ContentType application/json` header.
 **Arguments**
 
 - `"name":string` a friendly name for this product.
-- `"name":number` a friendly name for this product.
+- `"description":string` a friendly name for this product.
 
 **Response**
 
@@ -116,16 +143,11 @@ All the responses have `ContentType application/json` header.
 
 ```json
 {
-    "message": "Created product successfully",
-    "createdProduct": {
-        "name": "Federico Zacayan",
-        "price": 10,
-        "_id": "5d8a098ec56114001d6544be",
-        "request": {
-            "type": "GET",
-            "url": "http://localhost:3000/products/5d8a098ec56114001d6544be"
-        }
-    }
+    "name": "Federico Zacayan",
+    "description": "federico.zacayan@gmail.com",
+    "updated_at": "2019-09-25 03:00:58",
+    "created_at": "2019-09-25 03:00:58",
+    "id": 1
 }
 ```
 
@@ -139,33 +161,19 @@ All the responses have `ContentType application/json` header.
 
 ```json
 {
-    "product": {
-        "_id": "5d8a0988c56114001d6544bd",
-        "name": "Federico Zacayanr",
-        "price": 10
-    },
-    "request": {
-        "type": "GET",
-        "url": "http://localhost:3000/products"
-    }
+    "id": 1,
+    "name": "Federico Zacayan",
+    "description": "federico.zacayan@gmail.com",
+    "created_at": "2019-09-19 06:48:04",
+    "updated_at": "2019-09-19 06:48:04"
 }
 ```
 ## update products
 
-`PATCH /products/<identifier>`
+`PUT /products/<identifier>`
 **Arguments**
-
-- `array` with objects which represents the fields.
-  - `propName:string` name of property
-  - `value:Mixed` value of property
-```json
-[
-	{
-		"propName":"name",
-		"value":"Federico Zacayaan"
-	}
-]
-```
+- `"name":string` a friendly name for this product.
+- `"description":string` a friendly name for this product.
 
 **Response**
 
@@ -173,15 +181,11 @@ All the responses have `ContentType application/json` header.
 
 ```json
 {
-    "product": {
-        "_id": "5d8a0988c56114001d6544bd",
-        "name": "Federico Zacayanr",
-        "price": 10
-    },
-    "request": {
-        "type": "GET",
-        "url": "http://localhost:3000/products"
-    }
+    "name": "Federico Zacayan",
+    "description": "federico.zacayan@gmail.com",
+    "updated_at": "2019-09-25 03:00:58",
+    "created_at": "2019-09-25 03:00:58",
+    "id": 1
 }
 ```
 
@@ -193,17 +197,4 @@ All the responses have `ContentType application/json` header.
 
 **Response**
 
-- `500 Internal Error` if the product does not exist.
-- `200 No Content` on success.
-```json
-{
-    "message": "Product deleted",
-    "request": {
-        "type": "POST",
-        "url": "http://localhost:3000/products",
-        "body": {
-            "name": "String",
-            "price": "Number"
-        }
-    }
-}
+- `204 No Content` on success.
